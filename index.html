@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takeoff Monkey - Estimating Magic</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #0a0a0a;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main container */
+        .section-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Image base styles */
+        .bde-image {
+            position: absolute;
+            z-index: 1;
+        }
+
+        .breakdance-image {
+            margin: 0;
+        }
+
+        .breakdance-image-container {
+            display: flex;
+        }
+
+        .breakdance-image-clip {
+            overflow: hidden;
+        }
+
+        .breakdance-image-object {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Leaf positions */
+        .bde-image-2-211 {
+            top: 0;
+            left: 0;
+        }
+
+        .bde-image-2-211 img {
+            width: 280px;
+            max-width: 35vw;
+        }
+
+        .bde-image-2-212 {
+            top: 0;
+            right: 0;
+        }
+
+        .bde-image-2-212 img {
+            width: 200px;
+            max-width: 25vw;
+        }
+
+        .bde-image-2-216 {
+            bottom: 0;
+            left: 0;
+        }
+
+        .bde-image-2-216 img {
+            width: 350px;
+            max-width: 40vw;
+        }
+
+        .bde-image-2-217 {
+            bottom: 0;
+            right: 0;
+        }
+
+        .bde-image-2-217 img {
+            width: 300px;
+            max-width: 35vw;
+        }
+
+        /* Center content */
+        .bde-image-2-213 {
+            position: relative;
+            z-index: 10;
+        }
+
+        .bde-image-2-213 img {
+            width: 180px;
+            height: auto;
+        }
+
+        /* Divider */
+        .bde-fancy-divider {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .bde-fancy-divider__wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .bde-fancy-divider__separator {
+            width: 3px;
+            height: 80px;
+            background-color: #c9a227;
+            border-radius: 2px;
+        }
+
+        /* Heading */
+        .bde-heading {
+            position: relative;
+            z-index: 10;
+            color: #ffffff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: left;
+            line-height: 1.2;
+            letter-spacing: 0.05em;
+        }
+
+        /* Animations */
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .is-animated[data-entrance="zoomIn"] {
+            animation: zoomIn 0.8s ease-out forwards;
+        }
+
+        .is-animated[data-entrance="fade"] {
+            animation: fade 1s ease-out forwards;
+        }
+
+        /* Staggered animation delays */
+        .bde-image-2-211 { animation-delay: 0.1s; }
+        .bde-image-2-212 { animation-delay: 0.2s; }
+        .bde-image-2-213 { animation-delay: 0.4s; }
+        .bde-fancy-divider { animation-delay: 0.6s; }
+        .bde-heading { animation-delay: 0.8s; }
+        .bde-image-2-216 { animation-delay: 0.3s; }
+        .bde-image-2-217 { animation-delay: 0.4s; }
+
+        /* Initially hidden for animation */
+        .is-animated {
+            opacity: 0;
+        }
+
+        /* Center content wrapper */
+        .center-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            z-index: 10;
+        }
+
+        /* Small monkey icon in corner */
+        .corner-monkey {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #c9a227;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+
+        .corner-monkey img {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .bde-heading {
+                font-size: 1.8rem;
+            }
+
+            .bde-image-2-213 img {
+                width: 120px;
+            }
+
+            .bde-fancy-divider__separator {
+                height: 60px;
+            }
+
+            .center-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .bde-fancy-divider {
+                display: none;
+            }
+
+            .bde-heading {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="section-container">
+        <!-- Left top leaves -->
+        <div class="bde-image-2-211 bde-image is-animated" data-entrance="zoomIn">
+            <figure class="breakdance-image breakdance-image--178">
+                <div class="breakdance-image-container">
+                    <div class="breakdance-image-clip">
+                        <img class="breakdance-image-object" src="assets/leafs-home-left-top.svg" alt="Decorative leaves">
+                    </div>
+                </div>
+            </figure>
+        </div>
+
+        <!-- Right top leaves -->
+        <div class="bde-image-2-212 bde-image is-animated" data-entrance="zoomIn">
+            <figure class="breakdance-image breakdance-image--187">
+                <div class="breakdance-image-container">
+                    <div class="breakdance-image-clip">
+                        <img class="breakdance-image-object" src="assets/leafs-home-right-top.svg" alt="Decorative leaves">
+                    </div>
+                </div>
+            </figure>
+        </div>
+
+        <!-- Center content -->
+        <div class="center-content">
+            <!-- Logo -->
+            <div class="bde-image-2-213 bde-image is-animated" data-entrance="fade">
+                <figure class="breakdance-image breakdance-image--51">
+                    <div class="breakdance-image-container">
+                        <div class="breakdance-image-clip">
+                            <img class="breakdance-image-object" src="assets/TakeOff-Monkey-Logo-Yellow.svg" alt="Takeoff Monkey Logo">
+                        </div>
+                    </div>
+                </figure>
+            </div>
+
+            <!-- Divider -->
+            <div class="bde-fancy-divider-2-214 bde-fancy-divider is-animated" data-entrance="fade">
+                <div class="bde-fancy-divider__wrapper">
+                    <div class="bde-fancy-divider__separator"></div>
+                </div>
+            </div>
+
+            <!-- Heading -->
+            <h1 class="bde-heading-2-215 bde-heading is-animated" data-entrance="fade">
+                Estimating<br>Magic.
+            </h1>
+        </div>
+
+        <!-- Left bottom leaves -->
+        <div class="bde-image-2-216 bde-image is-animated" data-entrance="zoomIn">
+            <figure class="breakdance-image breakdance-image--181">
+                <div class="breakdance-image-container">
+                    <div class="breakdance-image-clip">
+                        <img class="breakdance-image-object" src="assets/leafs-home-left-bottom.svg" alt="Decorative leaves">
+                    </div>
+                </div>
+            </figure>
+        </div>
+
+        <!-- Right bottom leaves -->
+        <div class="bde-image-2-217 bde-image is-animated" data-entrance="zoomIn">
+            <figure class="breakdance-image breakdance-image--185">
+                <div class="breakdance-image-container">
+                    <div class="breakdance-image-clip">
+                        <img class="breakdance-image-object" src="assets/leafs-home-right-bottom.svg" alt="Decorative leaves">
+                    </div>
+                </div>
+            </figure>
+        </div>
+
+        <!-- Corner monkey icon -->
+        <div class="corner-monkey">
+            <img src="assets/TakeOff-Monkey-Logo-Yellow.svg" alt="Monkey icon">
+        </div>
+    </div>
+</body>
+</html>
